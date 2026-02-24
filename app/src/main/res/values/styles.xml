@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Uygulama teması - Status bar gizli, tam ekran -->
-    <style name="AppTheme" parent="android:Theme.Material.NoTitleBar.Fullscreen">
+    <style name="AppTheme" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:windowBackground">@android:color/white</item>
         <item name="android:statusBarColor">#2196F3</item>
     </style>
