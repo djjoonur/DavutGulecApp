@@ -12,13 +12,18 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 public class MainActivity extends Activity {
 
     private WebView webView;
     private ProgressBar progressBar;
-    private static final String WEBSITE_URL = "https://www.davutgulec.com";
+
+    private static final String URL_HOME       = "https://www.davutgulec.com";
+    private static final String URL_CATEGORIES = "https://www.davutgulec.com/category/haberler/";
+    private static final String URL_SHARE      = "https://www.davutgulec.com/haber-paylas/";
+    private static final String URL_CONTACT    = "https://linktr.ee/davutgulec";
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -26,7 +31,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        webView = findViewById(R.id.webView);
+        webView     = findViewById(R.id.webView);
         progressBar = findViewById(R.id.progressBar);
 
         // WebView ayarları
@@ -39,16 +44,15 @@ public class MainActivity extends Activity {
         webSettings.setSupportZoom(true);
         webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
 
-        // Harici linkleri tarayıcıda aç, dahili linkleri uygulama içinde aç
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 String url = request.getUrl().toString();
                 if (url.startsWith("https://www.davutgulec.com") ||
-                    url.startsWith("https://davutgulec.com")) {
-                    return false; // Uygulama içinde aç
+                    url.startsWith("https://davutgulec.com") ||
+                    url.startsWith("https://linktr.ee/davutgulec")) {
+                    return false;
                 }
-                // Harici linki tarayıcıda aç
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 startActivity(intent);
                 return true;
@@ -65,7 +69,6 @@ public class MainActivity extends Activity {
             }
         });
 
-        // Yükleme ilerlemesi
         webView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
@@ -73,10 +76,20 @@ public class MainActivity extends Activity {
             }
         });
 
-        webView.loadUrl(WEBSITE_URL);
+        webView.loadUrl(URL_HOME);
+
+        // Alt menü butonları
+        LinearLayout btnHome       = findViewById(R.id.btnHome);
+        LinearLayout btnCategories = findViewById(R.id.btnCategories);
+        LinearLayout btnShare      = findViewById(R.id.btnShare);
+        LinearLayout btnContact    = findViewById(R.id.btnContact);
+
+        btnHome.setOnClickListener(v -> webView.loadUrl(URL_HOME));
+        btnCategories.setOnClickListener(v -> webView.loadUrl(URL_CATEGORIES));
+        btnShare.setOnClickListener(v -> webView.loadUrl(URL_SHARE));
+        btnContact.setOnClickListener(v -> webView.loadUrl(URL_CONTACT));
     }
 
-    // Geri tuşu ile sayfa geçmişinde geri git
     @Override
     public void onBackPressed() {
         if (webView.canGoBack()) {
